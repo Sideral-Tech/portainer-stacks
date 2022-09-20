@@ -1,0 +1,25 @@
+---
+version: "3.8"
+services:
+  deluge:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+      - DELUGE_LOGLEVEL=error
+    volumes:
+      - /data/qbittorrent/config:/config
+      - /data/qbittorrent/downloads:/data/downloads
+    ports:
+      - 8080:8080
+      - 666:666
+      - 666:666/udp
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

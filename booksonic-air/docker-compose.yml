@@ -1,0 +1,25 @@
+---
+version: "3.8"
+services:
+  booksonic-air:
+    image: lscr.io/linuxserver/booksonic-air:latest
+    container_name: booksonic-air
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+      - CONTEXT_PATH=/booksonic
+    volumes:
+      - /data/booksonic/config:/config
+      - /data/booksonic/audiobooks:/data/audiobooks
+      - /data/booksonic/podcasts:/data/podcasts
+      - /data/booksonic/othermedia:/data/othermedia
+    ports:
+      - 127.0.0.1:4040:4040
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

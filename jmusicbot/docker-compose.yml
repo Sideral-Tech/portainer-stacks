@@ -1,0 +1,21 @@
+---
+version: "3.8"
+services:
+  radarr:
+    image: alexandreteles/jmusicbot:latest # or alexandreteles/jmusicbot:semeru-aarch64 for arm64
+    container_name: jmusicbot
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+    volumes:
+      - /data/jmusicbot/config.txt:/app/config.txt
+      - /data/jmusicbot/serversettings.json:/app/serversettings.json
+      - /data/jmusicbot/playlists:/app/playlists
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

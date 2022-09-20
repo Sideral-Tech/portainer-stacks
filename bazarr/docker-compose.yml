@@ -1,0 +1,25 @@
+---
+version: "3.8"
+services:
+  radarr:
+    image: lscr.io/linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+    volumes:
+      - /data/bazarr/config:/config
+      - /data/jellyfin/tv:/data/tv
+      - /data/jellyfin/anime:/data/anime
+      - /data/jellyfin/movies:/data/movies
+      - /data/qbittorrent/downloads:/data/downloads
+    ports:
+      - 127.0.0.1:6767:6767
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

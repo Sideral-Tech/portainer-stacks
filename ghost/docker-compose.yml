@@ -1,0 +1,21 @@
+---
+version: '3.8'
+services:
+  ghost:
+    image: ghost:alpine
+    container_name: ghost
+    restart: always
+    ports:
+      - 127.0.0.1:81:2368
+    environment:
+      - PUID=995
+      - PGID=995
+      - url=https://example.com
+    volumes:
+      - /data/ghost/default:/var/lib/ghost/content
+    networks:
+      - infra
+
+networks:
+   infra:
+     external: true

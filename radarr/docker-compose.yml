@@ -1,0 +1,23 @@
+---
+version: "3.8"
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+    volumes:
+      - /data/radarr/config:/config
+      - /data/jellyfin/movies:/data/movies
+      - /data/qbittorrent/downloads:/data/downloads
+    ports:
+      - 127.0.0.1:7878:7878
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

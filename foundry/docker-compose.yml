@@ -1,0 +1,38 @@
+---
+version: "3.8"
+services:
+  foundry:
+    image: felddy/foundryvtt:release
+    container_name: foundry
+    hostname: foundry
+    volumes:
+      - /data/foundry/data:/data
+      - /data/foundry/foundryvtt:/home/foundry/resources
+      - /data/foundry/cache:/cache
+    environment:
+      - PUID=995
+      - PGID=995
+      - FOUNDRY_UID=995
+      - FOUNDRY_GID=995
+      - FOUNDRY_HOSTNAME=example.com
+      - FOUNDRY_LOCAL_HOSTNAME=example.com
+      - FOUNDRY_IP_DISCOVERY=false
+      - CONTAINER_CACHE=/cache
+      - FOUNDRY_PROXY_PORT=443
+      - FOUNDRY_PROXY_SSL=true
+      - FOUNDRY_PASSWORD=your_stronk_password
+      - FOUNDRY_USERNAME=your_username
+      - FOUNDRY_ADMIN_KEY=your_stronk_instance_password
+      - FOUNDRY_LICENSE_KEY=your_foundry_key
+      - CONTAINER_PRESERVE_CONFIG=true
+      - FOUNDRY_MINIFY_STATIC_FILES=true
+      - TIMEZONE=America/Bahia
+    ports:
+      - 127.0.0.1:30000:30000
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

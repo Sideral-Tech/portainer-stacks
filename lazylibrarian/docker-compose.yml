@@ -1,0 +1,25 @@
+---
+version: "3.8"
+services:
+  radarr:
+    image: lscr.io/linuxserver/lazylibrarian:latest
+    container_name: lazylibrarian
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+      - DOCKER_MODS=linuxserver/calibre-web:calibre|linuxserver/mods:lazylibrarian-ffmpeg
+    volumes:
+      - /data/lazylibrarian/data:/config
+      - /data/lazylibrarian/books:/data/books
+      - /data/booksonic/audiobooks:/data/audiobooks
+      - /data/qbittorrent/downloads:/data/downloads
+    ports:
+      - 127.0.0.1:5299:5299
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

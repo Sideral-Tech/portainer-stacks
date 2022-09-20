@@ -1,0 +1,28 @@
+---
+version: "3.8"
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=995
+      - PGID=995
+      - TZ=America/Bahia
+    volumes:
+      - /data/jellyfin/config:/config
+      - /data/jellyfin/tv:/data/tv
+      - /data/jellyfin/movies:/data/movies
+      - /data/jellyfin/anime:/data/anime
+      - /data/jellyfin/music:/data/music
+      - /data/booksonic/audiobooks:/data/audiobooks
+      - /data/booksonic/podcasts:/data/podcasts
+      - /data/booksonic/othermedia:/data/othermedia
+    ports:
+      - 127.0.0.1:8096:8096
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

@@ -1,0 +1,36 @@
+---
+version: '3.8'
+services:
+   db:
+     image: mariadb:latest
+     container_name: default_wp_db
+     volumes:
+       - /data/mariadb/default:/var/lib/mysql
+       - /data/mariadb/my.cnf:/etc/mysql/conf.d/my.cnf
+     restart: always
+     environment:
+       MYSQL_RANDOM_ROOT_PASSWORD: yes
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+     networks:
+      - infra
+
+   wordpress:
+     image: wordpress:latest
+     container_name: wp
+     volumes:
+      - /data/wordpress/default:/var/www/html
+     ports:
+       - 127.0.0.1:81:80
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: default_wp_db:3306
+       WORDPRESS_DB_USER: wordpress
+       WORDPRESS_DB_PASSWORD: wordpress
+     networks:
+      - infra
+
+networks:
+   infra:
+     external: true

@@ -1,0 +1,35 @@
+---
+version: "3.8"
+
+volumes:
+  redis-data:
+    driver: local
+
+services:
+  redis:
+    container_name: revanced-releases-api-redis
+    image: redis:latest
+    volumes:
+      - redis-data:/data
+    networks:
+      - infra
+    restart: always
+  revanced-releases-api:
+    container_name: revanced-releases-api
+    image: ghcr.io/alexandreteles/revanced-releases-api:latest
+    environment:
+      - REDIS_URL=revanced-releases-api-redis
+      - REDIS_PORT=6379
+      - GITHUB_TOKEN=YOUR_GITHUB_TOKEN
+      - UVICORN_HOST=0.0.0.0
+      - UVICORN_PORT=8000
+      - UVICORN_LOG_LEVEL=debug
+    ports:
+      - 127.0.0.1:7934:8000
+    networks:
+      - infra
+    restart: unless-stopped
+
+networks:
+   infra:
+     external: true

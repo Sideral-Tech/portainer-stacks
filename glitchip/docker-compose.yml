@@ -1,0 +1,47 @@
+version: "3.4"
+x-environment:
+  &default-environment
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+  SECRET_KEY: YOUR_SECRET_KEY # best to run openssl rand -hex 32
+  PORT: 8010
+  EMAIL_URL: YOUR_EMAIL_URL # https://glitchtip.com/documentation/install#configuration
+  GLITCHTIP_DOMAIN: https://example.com # Change this to your domain
+  DEFAULT_FROM_EMAIL: YOUR_DEFAULT_EMAIL # Change this to your email
+  CELERY_WORKER_CONCURRENCY: 2 # Set to 2 to prevent excessive memory usage. Change it or remove to set it to the number of cpu cores.
+x-depends_on:
+  &default-depends_on
+  - postgres
+  - redis
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    restart: unless-stopped
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+  web:
+    image: glitchtip/glitchtip:latest
+    depends_on: *default-depends_on
+    ports:
+      - 127.0.0.1:8010:8010
+    environment: *default-environment
+    restart: unless-stopped
+  worker:
+    image: glitchtip/glitchtip:latest
+    command: ./bin/run-celery-with-beat.sh
+    depends_on: *default-depends_on
+    environment: *default-environment
+    restart: unless-stopped
+  migrate:
+    image: glitchtip/glitchtip:latest
+    depends_on: *default-depends_on
+    command: "./manage.py migrate"
+    environment: *default-environment
+
+volumes:
+  pg-data:
