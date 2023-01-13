@@ -1,34 +1,33 @@
-# Custom Portainer Stacks
+# Sideral Technologies - Custom Portainer Stacks
 
-Custom Portainer stacks are basically just Docker compose files with a few extra bits of metadata added to them. This allows you to easily deploy them to your Portainer instance.
+Sideral Technologies has developed custom Portainer stacks, which are essentially Docker compose files with additional metadata for easy deployment to a Portainer instance.
 
-## How to use
+## How to Use
 
-Before you can use these stacks, you need to have a Portainer instance running. You can find instructions on how to do that [here](https://portainer.readthedocs.io/en/stable/deployment.html). Once you have Portainer running, go to the "Network" tab and create a new network called `infra`. This is where all of the containers will be deployed to. You can name it whatever you want, but you'll need to change the `networks` section of the compose files to match.
+To use these stacks, a Portainer instance must first be running. Instructions for deploying a Portainer instance can be found [here](https://portainer.readthedocs.io/en/stable/deployment.html). Once Portainer is running, navigate to the "Network" tab and create a new network called `infra`. This is where all containers will be deployed. The network can be named as desired, but the `networks` section of the compose files must be updated to match.
 
-After you have you can deploy the stacks:
-
-1. Pick a stack you want to deploy
-2. Go to your Portainer instance
-3. Click on "App Templates" in the sidebar
-4. Click on "Custom Templates"
-5. Click on "Add Custom Template"
-6. Either copy and paste the contents of the `docker-compose.yml` file, upload the file or
+To deploy the stacks:
+1. Select the desired stack
+2. Access the Portainer instance
+3. Navigate to "App Templates" in the sidebar
+4. Select "Custom Templates"
+5. Click "Add Custom Template"
+6. Input the contents of the `docker-compose.yml` file through copy and paste, file upload or 
 7. Click "Repository"
-8. Enter the URL of the repository and the path to the `docker-compose.yml` file in the "Compose path" field, e.g.: `booksonic-air/docker-compose.yml`
-9. You'll now see the stack in your Portainer instance. Click on it and click "Deploy the stack".
+8. Enter the URL of the repository and the path to the `docker-compose.yml` file in the "Compose path" field, e.g. `booksonic-air/docker-compose.yml`
+9. The stack will now be visible in the Portainer instance and can be deployed by clicking on the stack and selecting "Deploy the stack".
 
-We recommend you use the "Repository" method, as it will make it easier to update the stacks in the future.
+Sideral Technologies recommends using the "Repository" method for ease of future updates.
 
-Those are the basic steps. If you want to learn more about Portainer, check out their [documentation](https://portainer.readthedocs.io/en/stable/).
+For more information on Portainer, refer to their [documentation](https://portainer.readthedocs.io/en/stable/).
 
-P.S.: as we're using the `infra` network, you'll need to make sure that the containers you're deploying don't use the same ports. If you're deploying multiple instances of the same stack, you'll need to change the ports in the compose file. Also, all timezones are set to `America/Bahia` by default. If you want to change that, you'll need to edit the compose file.
+Please note that as the `infra` network is used, care must be taken to ensure that the deployed containers do not use the same ports. If multiple instances of the same stack are being deployed, the ports in the compose file must be adjusted accordingly. Additionally, all timezones are set to `America/Bahia` by default. If a different timezone is desired, the compose file must be edited accordingly.
 
-Talking about editing compose files, you can use Portainer's stack editor to make changes to the compose files. You can also use the editor to add environment variables to the stacks that support and/or require them. Some stacks also have configuration files in their folders. You can edit those files to make changes to the stacks.
+The compose files can be edited using Portainer's stack editor. Additionally, environment variables can be added to stacks that support and/or require them. Some stacks also have configuration files located in their respective folders, which can be edited to make changes to the stacks.
 
 ### Accessing the apps
 
-Please check the documentation for each app to find out how to access and set it up. None of the stacks publish any ports, so you'll need to use a reverse proxy to access them. We recommend [caddy](https://caddyserver.com/) as it's easy to set up and configure and offers automatic HTTPS. You can find instructions on how to set it up [here](https://caddyserver.com/docs/install). You can also use [Traefik](https://traefik.io/) or [nginx](https://nginx.org/en/) or whatever you feel like (there are some haproxy nerds out there somewhere). Below is an example Caddyfile:
+To access and set up the apps, refer to the documentation for each app. As none of the stacks publish any ports, a reverse proxy must be used for access. Sideral Technologies recommends using [caddy](https://caddyserver.com/) for its ease of set up and configuration, as well as automatic HTTPS. Instructions for set up can be found [here](https://caddyserver.com/docs/install). Alternatives such as [Traefik](https://traefik.io/) and [nginx](https://nginx.org/en/) can also be used at the user's discretion. An example Caddyfile is shown below:
 
 ```Caddyfile
 booksonic.example.com {
@@ -37,11 +36,11 @@ booksonic.example.com {
 }
 ```
 
-Yeah, that's it. You can now access Booksonic Air at `booksonic.example.com`.
+With this configuration, Booksonic Air can be accessed at booksonic.example.com.
 
 ### Directory structure
 
-Below is a directory structure for the volumes used by the stacks. You can change the paths to whatever you want, but you'll need to change the `volumes` section of the compose files to match.
+The directory structure for the volumes used by the stacks is shown below. These paths can be adjusted to the user's preference, but the volumes section of the compose files must be updated accordingly.
 
 ```text
 data/
@@ -93,13 +92,11 @@ data/
 │  ├─ default/
 ```
 
-Please note that some stacks use the same volumes/folders as others. That's either because they share the same data or because they use the same database. For example, `qbittorrent` is our torrent client and `radarr` is our movie library organizer. Radarr not only uses qBittorrent as a download client, but is also able to automatically sync the downloaded files to Jellyfin. The same goes for most of the other `*arr` apps. So we recommend that if you don't exactly know what you're doing, you don't change the paths.
+Please note that some stacks use the same volumes/folders as others. This is because they share the same data or because they use the same database. For example, `qbittorrent` is our torrent client and `radarr` is our movie library organizer. Radarr not only uses qBittorrent as a download client, but is also able to automatically sync the downloaded files to Jellyfin. The same applies for most of the other `*arr` apps. Therefore, we recommend that you do not change the paths unless you are certain of what you are doing.
 
-I'll add a script that automatically creates the directory structure for you in the future. Until then, you'll have to do it manually. Good luck!
+In the future, we will provide a script that automatically creates the directory structure for you. Until then, you will have to do it manually.
 
-### Updating
-
-To update a stack you can do the following:
+### Updating a stack
 
 1. Go to your Portainer instance
 2. Click on "Stacks" in the sidebar
@@ -110,31 +107,25 @@ To update a stack you can do the following:
 7. Click "Update"
 8. Wait for the stack to update
 
-### Uninstalling
-
-To uninstall a stack you can do the following:
+### Uninstalling a stack
 
 1. Go to your Portainer instance
 2. Click on "Stacks" in the sidebar
 3. Click on the stack you want to uninstall
 4. Click on "Delete this stack"
 5. Wait for the stack to be deleted
-
-That process will leave ununsed images behind. To remove them you can do the following:
-
-1. Go to your Portainer instance
-2. Click on "Images" in the sidebar
-3. Click on the image you want to remove
-4. Click on "Delete this image"
-5. Wait for the image to be deleted
+6. Click on "Images" in the sidebar
+7. Click on the image you want to remove
+8. Click on "Delete this image"
+9. Wait for the image to be deleted
 
 ### Backups
 
-In production we use btrfs for both our underlying filesystem and our Docker storage driver. That allow us to generate backups of the volumes using `btrfs subvolume snapshot` and dispatch it to remote locations using `btrfs send` and `btrfs receive`. Another option is to use `rsync` to copy the volumes or folders to a remote location.
+At Sideral Technologies, we utilize btrfs for both our underlying filesystem and our Docker storage driver to ensure the safety and security of our data. This allows us to easily generate backups of our volumes through the use of `btrfs subvolume snapshot` and seamlessly dispatch them to remote locations through the use of `btrfs send` and `btrfs receive`. Additionally, we also employ the use of `rsync` to copy our volumes or folders to remote locations as an added measure of protection.
 
-Even another option is to use the `docker-volume-backup` to backup the volumes. You can find instructions on how to do that [here](https://github.com/jareware/docker-volume-backup). Restoring backups is also possible using the same tool although it's not as easy as it is with `btrfs` (all options are boring and tedious as per usual with backups).
+Another option for volume backups is the use of `docker-volume-backup`. Instructions for implementation can be found [here](https://github.com/jareware/docker-volume-backup). Restoring backups is also possible through the use of this tool, although the process may not be as streamlined as it is with `btrfs`.
 
-## How to add your own
+## How to add new stacks
 
 1. Fork this repository
 2. Create a new folder for your stack
@@ -142,8 +133,6 @@ Even another option is to use the `docker-volume-backup` to backup the volumes. 
 4. Submit a pull request
 
 ## Available stacks
-
-I just ran `tree -L 1 --sort name ./portainer-stacks` and removed the files in the root directory because I'm lazy:
 
 ```text
 portainer-stacks/
@@ -165,3 +154,11 @@ portainer-stacks/
 ├── sonarr
 └── wordpress
 ```
+
+## Note
+
+Let it be known that any and all scripts, tools, and solutions developed by Sideral Technologies are for the exclusive use of our organization. Any unauthorized distribution or sharing of these resources will be met with severe consequences. Any modifications made to these solutions must be approved and tested by Sideral Technologies prior to implementation in any production setting. Any deviation from these guidelines will not be tolerated.
+
+## Disclaimer
+
+Sideral Technologies will not be held responsible for any unauthorized or illegal use of this script. Use of the stacks in this repository is at your own risk and any consequences resulting from such use will be borne solely by the user.
